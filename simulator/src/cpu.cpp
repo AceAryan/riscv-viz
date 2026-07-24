@@ -32,7 +32,7 @@ void CPU::step() {
     // halt condition — all zeros means end of program
     if (raw == 0x00000000) {
         state = CPUState::HALTED;
-        std::cout << "CPU halted at PC=0x" << std::hex << PC << "\n";
+        std::cerr << "CPU halted at PC=0x" << std::hex << PC << "\n";
         return;
     }
 

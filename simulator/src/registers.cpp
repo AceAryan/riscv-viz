@@ -29,7 +29,7 @@ void RegisterFile::write(int index, int32_t value) {
 
 void RegisterFile::print() {
     for (int i = 0; i < 32; i++) {
-        std::cout << "x" << std::setw(2) << std::setfill('0') << i
+        std::cout << "x" << std::dec << std::setw(2) << std::setfill('0') << i
                   << " = " << std::setw(10) << regs[i];
         if ((i + 1) % 4 == 0) std::cout << "\n";
         else std::cout << "  |  ";

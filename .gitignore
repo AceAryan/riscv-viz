@@ -3,3 +3,9 @@ simulator/build/
 
 # IDE
 .vscode/
+
+# Python 
+__pycache__/
+*.pyc
+.env
+venv/

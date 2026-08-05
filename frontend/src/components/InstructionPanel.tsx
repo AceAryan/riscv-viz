@@ -1,18 +1,15 @@
 interface Props {
   pc: number;
-  cycle: number;
   memory: number[];
 }
 
-// minimal disassembler — just shows address and raw hex for now
-export default function InstructionPanel({ pc, cycle, memory }: Props) {
+export default function InstructionPanel({ pc, memory }: Props) {
   const instructions = [];
   for (let i = 0; i < 48; i += 4) {
     const word = memory[i] | (memory[i+1] << 8) | (memory[i+2] << 16) | (memory[i+3] << 24);
     if (word === 0) break;
     instructions.push({ addr: i, word });
   }
-
   return (
     <div className="panel">
       <h3>Instructions</h3>

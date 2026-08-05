@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { CPUState } from '../types/index.ts';
 
-const BASE = 'http://localhost:8000';
+const BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 export const loadProgram = async (program: string): Promise<CPUState> => {
   const res = await axios.post(`${BASE}/load`, { program });

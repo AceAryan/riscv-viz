@@ -48,7 +48,7 @@ export default function App() {
             cycle={state.cycle}
             halted={state.halted}
           />
-          <InstructionPanel pc={state.pc} cycle={state.cycle} memory={state.memory} />
+          <InstructionPanel pc={state.pc} memory={state.memory} />
         </div>
         <div className="right">
           <RegisterViewer registers={state.registers} prevRegisters={prevRegs} />

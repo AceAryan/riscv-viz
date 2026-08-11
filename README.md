@@ -2,13 +2,22 @@
 
 Cycle-accurate RISC-V simulator with live register, memory, and datapath visualization. C++ simulation core exposed via REST API, React frontend.
 
+**[Live Demo](https://riscv-viz.vercel.app)**
+
+---
+
+## Demo
+
+![demo](demo.gif)
+
 ---
 
 ## Stack
 
 - **Simulator** — C++17, CMake
-- **Backend** — FastAPI (bridges C++ binary to frontend)
+- **Backend** — FastAPI + Docker (bridges C++ binary to frontend)
 - **Frontend** — React, TypeScript, Vite
+- **Deployment** — Vercel (frontend), Render (backend)
 
 ---
 
@@ -24,7 +33,7 @@ Implements a subset of the RV32I base integer ISA:
 | B | `beq` `bne` `blt` `bge` |
 | J | `jal` |
 
-Instruction decoding uses direct bit extraction — no lookup tables. Immediates are sign-extended per the RV32I spec.
+Instruction decoding uses direct bit extraction — no lookup tables. Immediates are sign-extended per the RV32I spec. Memory is byte-addressable with little-endian load/store and alignment checks.
 
 ---
 
@@ -34,26 +43,62 @@ Instruction decoding uses direct bit extraction — no lookup tables. Immediates
 |----------|-------------|
 | `POST /load` | Load assembly program into memory |
 | `POST /step` | Execute one cycle, return updated state |
+| `POST /stepback` | Rewind one cycle |
 | `POST /run` | Run until halt or max cycles |
 | `POST /reset` | Reset CPU state |
 | `GET /state` | Return full register file + memory snapshot |
 
-All responses are JSON containing `{ registers, memory, pc, current_instruction }`.
+All responses are JSON: `{ pc, cycle, halted, registers, memory }`.
 
 ---
 
-## Setup
+## Local setup
+
+### Simulator
 
 ```bash
-# build simulator
-cd simulator && mkdir build && cd build
+cd simulator
+mkdir build && cd build
 cmake .. && make
-
-# backend
-cd backend && pip install fastapi uvicorn
-uvicorn server:app --reload
-
-# frontend
-cd frontend && npm install && npm run dev
+./riscv-sim ../tests/fibonacci.s
 ```
 
+### Backend
+
+```bash
+cd backend
+python3 -m venv venv && source venv/bin/activate
+pip install fastapi uvicorn pydantic
+uvicorn server:app --reload
+```
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### Docker (recommended)
+
+```bash
+docker build -f backend/Dockerfile -t riscv-viz-backend .
+docker run -p 8000:8000 riscv-viz-backend
+```
+
+---
+
+## Roadmap
+
+- [x] Instruction decode (R/I/S/B/J)
+- [x] Register file, ALU, byte-addressable memory
+- [x] Fetch-decode-execute loop
+- [x] Assembly parser (.s → binary)
+- [x] FastAPI backend with step/run/reset/stepback
+- [x] Docker containerization
+- [x] React frontend — register viewer, memory viewer, instruction panel
+- [x] Deployed on Vercel + Render
+- [ ] Pipeline visualization (IF/ID/EX/MEM/WB)
+- [ ] Hazard detection and forwarding
+- [ ] Cache simulator

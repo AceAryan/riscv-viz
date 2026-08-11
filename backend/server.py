@@ -16,7 +16,7 @@ app.add_middleware(
 )
 
 # path to compiled simulator binary
-BINARY = "/mnt/d/Dev/CPUsim/simulator/build/riscv-sim"  
+BINARY = os.environ.get("BINARY_PATH", "/app/simulator/build/riscv-sim")
 
 # ── in-memory CPU state ────────────────────────────
 # we re-run the simulation from scratch to reach desired state
@@ -114,3 +114,15 @@ def get_state():
     if not state.program_text:
         raise HTTPException(status_code=400, detail="No program loaded")
     return run_simulator(state.program_text, state.cycle)
+
+@app.get("/debug")
+def debug():
+    import os
+    binary = os.environ.get("BINARY_PATH", "/app/simulator/build/riscv-sim")
+    return {
+        "binary": binary,
+        "exists": os.path.exists(binary),
+        "app_contents": os.listdir("/app"),
+        "simulator_contents": os.listdir("/app/simulator") if os.path.exists("/app/simulator") else "missing",
+        "build_contents": os.listdir("/app/simulator/build") if os.path.exists("/app/simulator/build") else "missing"
+    }

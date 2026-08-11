@@ -10,7 +10,7 @@ app = FastAPI()
 # allow React frontend to call this API
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://riscv-viz.vercel.app"],
     allow_methods=["*"],
     allow_headers=["*"],
 )

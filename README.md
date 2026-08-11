@@ -87,18 +87,3 @@ docker build -f backend/Dockerfile -t riscv-viz-backend .
 docker run -p 8000:8000 riscv-viz-backend
 ```
 
----
-
-## Roadmap
-
-- [x] Instruction decode (R/I/S/B/J)
-- [x] Register file, ALU, byte-addressable memory
-- [x] Fetch-decode-execute loop
-- [x] Assembly parser (.s → binary)
-- [x] FastAPI backend with step/run/reset/stepback
-- [x] Docker containerization
-- [x] React frontend — register viewer, memory viewer, instruction panel
-- [x] Deployed on Vercel + Render
-- [ ] Pipeline visualization (IF/ID/EX/MEM/WB)
-- [ ] Hazard detection and forwarding
-- [ ] Cache simulator
